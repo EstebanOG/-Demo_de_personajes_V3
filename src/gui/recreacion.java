@@ -57,10 +57,11 @@ public class recreacion extends JPanel {
     int i = 0;
     boolean colision = false;
     boolean colisionPocima = false;
-    Rectangle rect = new Rectangle(403,423,30,20);
-    Rectangle rectPj = new Rectangle(340,230,52,80);
-    
+    Rectangle rect = new Rectangle(403, 423, 30, 20);
+    Rectangle rectPj = new Rectangle(340, 230, 52, 80);
+
     boolean entra = true;
+
     public recreacion() {
 
         fondo = h.getImage(this.getClass().getResource("/assets/map.png"));
@@ -77,7 +78,6 @@ public class recreacion extends JPanel {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
-                
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_UP:
                         posicion[0] = posicion[1];
@@ -168,21 +168,26 @@ public class recreacion extends JPanel {
                         }
                         break;
                     case KeyEvent.VK_Q:
-                        if (arreglo_personajes.size() < 2) {//Se clona el personaje, máximo un clon
-                            if (entra == true) {
-                                System.out.println("No ha cogido el objeto");
-                                clonarVida = new StrategyNormal(personaje);
-                                clonarVida.vidaEscudo();
-                            } else {
-                                System.out.println("Ya cogio el objeto");
-                                clonarVida = new StrategyDecorado(personaje);
-                           
-                                clonarVida.vidaEscudo();
+                        //personajetemp.clear();
+                        for (i = 0; i < arreglo_personajes.size(); i++) {
+                            personajetemp.add((Personaje) arreglo_personajes.get(i));
+                            if (arreglo_personajes.size() < 2) {//Se clona el personaje, máximo un clon
+                                /*Se utiliza Strategy para evaluar la vida que se le baja a ambos personajes*/
+                                /*Si está decorado se le baja 20 de vida al clonar*/
+                                /*Si está normal se le baja 40 de vida al clonar*/
+                                if (entra == true) {
+                                    clonarVida = new StrategyNormal(personajetemp.get(i));
+                                    clonarVida.vidaEscudo();
+                                } else {
+                                    clonarVida = new StrategyDecorado(personajetemp.get(i));
+                                    clonarVida.vidaEscudo();
+                                }
+                                Personaje personajeClonUno = (Personaje) personajetemp.get(i).clonar();
+                                arreglo_personajes.add(personajeClonUno);
                             }
-                            Personaje personajeClonUno = (Personaje) personaje.clonar();
-                            arreglo_personajes.add(personajeClonUno);
                         }
                         break;
+
                 }
             }
         });
@@ -255,8 +260,6 @@ public class recreacion extends JPanel {
                         }
                         //Se usa aumentoPorPocima para evaluar si aumentar escudo o vida por medio de Cadena de responsailidad
                         aumentoPorPocima.operacion(personajetemp.get(i).getVida(), personajetemp.get(i).getEscudo(), personajetemp.get(i));
-                        /*Patron Strategy*/
-
                     }
                     entra = false;
                     colisionPocima = true;
