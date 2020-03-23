@@ -1,14 +1,12 @@
 package strategy;
 
-import java.util.Random;
+import animacion.Personaje;
 
 public abstract class Strategy {
-    public Random rand = new Random();
-    public int[] arreglo = new int[10];
-    
-    public int generarAleatorio(){
-        return rand.nextInt(100);
+    Personaje personaje;
+
+    public Strategy(Personaje personaje) {
+        this.personaje = personaje;
     }
-    
-    public abstract void llenado();
+    public abstract void vidaEscudo();
 }

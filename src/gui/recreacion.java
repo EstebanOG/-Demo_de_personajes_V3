@@ -19,15 +19,15 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import strategy.StrategyFlechas;
-import strategy.StrategyAWSD;
+import strategy.StrategyNormal;
+import strategy.StrategyDecorado;
 import strategy.Strategy;
 
 public class recreacion extends JPanel {
 
     static Personaje personaje;
     public Verificar aumentoPorPocima = new Verificar();//Se crea un objeto de la clase Verificar la cual se encuentra ChainOfResponsability
-    Strategy arreglo; // Objeto de la clase Strategy
+    Strategy clonarVida; // Objeto de la clase Strategy
     JFrame ventana = new JFrame();
     Font fuenteVida = new Font("Calibri", 3, 16);// Fuente vida
     Font fuenteEscudo = new Font("Calibri", 3, 16);// Fuente escudo
@@ -168,15 +168,19 @@ public class recreacion extends JPanel {
                         }
                         break;
                     case KeyEvent.VK_Q:
-                        if(arreglo_personajes.size()<2){//Se clona el personaje, máximo un clon
-                            if(entra == true){
+                        if (arreglo_personajes.size() < 2) {//Se clona el personaje, máximo un clon
+                            if (entra == true) {
                                 System.out.println("No ha cogido el objeto");
-                            }else{
+                                clonarVida = new StrategyNormal(personaje);
+                                clonarVida.vidaEscudo();
+                            } else {
                                 System.out.println("Ya cogio el objeto");
+                                clonarVida = new StrategyDecorado(personaje);
+                           
+                                clonarVida.vidaEscudo();
                             }
                             Personaje personajeClonUno = (Personaje) personaje.clonar();
                             arreglo_personajes.add(personajeClonUno);
-                            System.out.println("Clonar");
                         }
                         break;
                 }
@@ -252,12 +256,7 @@ public class recreacion extends JPanel {
                         //Se usa aumentoPorPocima para evaluar si aumentar escudo o vida por medio de Cadena de responsailidad
                         aumentoPorPocima.operacion(personajetemp.get(i).getVida(), personajetemp.get(i).getEscudo(), personajetemp.get(i));
                         /*Patron Strategy*/
-                        arreglo = new StrategyFlechas();
-                        System.out.println("llenado hacia adelante");
-                        arreglo.llenado();
-                        arreglo = new StrategyAWSD();
-                        System.out.println("llenado hacia atras");
-                        arreglo.llenado();
+
                     }
                     entra = false;
                     colisionPocima = true;
