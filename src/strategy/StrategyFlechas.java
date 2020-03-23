@@ -1,6 +1,6 @@
 package strategy;
 
-public class EstrategiaAdelante extends Strategy{
+public class StrategyFlechas extends Strategy{
 
     @Override
     public void llenado() {

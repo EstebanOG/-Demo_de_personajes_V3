@@ -7,6 +7,7 @@ import decorator.ElfoDecorator;
 import decorator.EnanoDecorator;
 import decorator.OrcoDecorator;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -18,16 +19,18 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import strategy.EstrategiaAdelante;
-import strategy.EstrategiaAtras;
+import strategy.StrategyFlechas;
+import strategy.StrategyAWSD;
 import strategy.Strategy;
 
 public class recreacion extends JPanel {
 
     static Personaje personaje;
     public Verificar aumentoPorPocima = new Verificar();//Se crea un objeto de la clase Verificar la cual se encuentra ChainOfResponsability
-    Strategy arreglo;
+    Strategy arreglo; // Objeto de la clase Strategy
     JFrame ventana = new JFrame();
+    Font fuenteVida = new Font("Calibri", 3, 16);// Fuente vida
+    Font fuenteEscudo = new Font("Calibri", 3, 16);// Fuente escudo
     static ArrayList<Personaje> personajetemp = new ArrayList<>();
     static ArrayList<Object> arreglo_personajes = new ArrayList<>();
     private final int AnchoVentana = 800;
@@ -74,6 +77,7 @@ public class recreacion extends JPanel {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
+                
                 switch (e.getKeyCode()) {
                     case KeyEvent.VK_UP:
                         posicion[0] = posicion[1];
@@ -163,6 +167,18 @@ public class recreacion extends JPanel {
                             Incremento = 0;
                         }
                         break;
+                    case KeyEvent.VK_Q:
+                        if(arreglo_personajes.size()<2){//Se clona el personaje, máximo un clon
+                            if(entra == true){
+                                System.out.println("No ha cogido el objeto");
+                            }else{
+                                System.out.println("Ya cogio el objeto");
+                            }
+                            Personaje personajeClonUno = (Personaje) personaje.clonar();
+                            arreglo_personajes.add(personajeClonUno);
+                            System.out.println("Clonar");
+                        }
+                        break;
                 }
             }
         });
@@ -181,10 +197,10 @@ public class recreacion extends JPanel {
         if(colisionPocima == false){
             g2d.drawImage(pocion, 390, 400, 60, 60, this);
         }
-        if (poblacion.equals("Individual")) {
+        if (1 == arreglo_personajes.size()) {
             aumentoSpriteY = 0;
         } else {
-            aumentoSpriteY = 80;
+            aumentoSpriteY = 110;
         }
         for (i = 0; i < arreglo_personajes.size(); i++) {
             personajetemp.add((Personaje) arreglo_personajes.get(i));
@@ -236,10 +252,10 @@ public class recreacion extends JPanel {
                         //Se usa aumentoPorPocima para evaluar si aumentar escudo o vida por medio de Cadena de responsailidad
                         aumentoPorPocima.operacion(personajetemp.get(i).getVida(), personajetemp.get(i).getEscudo(), personajetemp.get(i));
                         /*Patron Strategy*/
-                        arreglo = new EstrategiaAdelante();
+                        arreglo = new StrategyFlechas();
                         System.out.println("llenado hacia adelante");
                         arreglo.llenado();
-                        arreglo = new EstrategiaAtras();
+                        arreglo = new StrategyAWSD();
                         System.out.println("llenado hacia atras");
                         arreglo.llenado();
                     }
@@ -247,13 +263,15 @@ public class recreacion extends JPanel {
                     colisionPocima = true;
                 }
             }
-            
+            g2d.setFont(fuenteVida);//Fuente del porcentaje de vida
             g2d.setColor(Color.RED);//Color de la vida
             g2d.drawString(String.valueOf(personajetemp.get(i).getVida()) + "%", incx , incy - 30 + y);//Pinta el porcentaje de vida que tiene
+            g2d.setFont(fuenteEscudo);//Fuente del porcentaje de escudo
             g2d.setColor(Color.BLUE);//Color del escudo
             g2d.drawString(String.valueOf(personajetemp.get(i).getEscudo()) + "%" , incx , incy - 40 + y);//Pinta el porcentaje de escudo que tiene
             y = y + aumentoSpriteY;
         }
+        personajetemp.clear();
         repaint();
     }
 

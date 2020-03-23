@@ -1,6 +1,6 @@
 package strategy;
 
-public class EstrategiaAtras extends Strategy{
+public class StrategyAWSD extends Strategy{
 
     @Override
     public void llenado() {
