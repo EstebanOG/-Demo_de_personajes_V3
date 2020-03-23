@@ -18,11 +18,15 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import strategy.EstrategiaAdelante;
+import strategy.EstrategiaAtras;
+import strategy.Strategy;
 
 public class recreacion extends JPanel {
 
     static Personaje personaje;
     public Verificar aumentoPorPocima = new Verificar();//Se crea un objeto de la clase Verificar la cual se encuentra ChainOfResponsability
+    Strategy arreglo;
     JFrame ventana = new JFrame();
     static ArrayList<Personaje> personajetemp = new ArrayList<>();
     static ArrayList<Object> arreglo_personajes = new ArrayList<>();
@@ -231,6 +235,13 @@ public class recreacion extends JPanel {
                         }
                         //Se usa aumentoPorPocima para evaluar si aumentar escudo o vida por medio de Cadena de responsailidad
                         aumentoPorPocima.operacion(personajetemp.get(i).getVida(), personajetemp.get(i).getEscudo(), personajetemp.get(i));
+                        /*Patron Strategy*/
+                        arreglo = new EstrategiaAdelante();
+                        System.out.println("llenado hacia adelante");
+                        arreglo.llenado();
+                        arreglo = new EstrategiaAtras();
+                        System.out.println("llenado hacia atras");
+                        arreglo.llenado();
                     }
                     entra = false;
                     colisionPocima = true;
