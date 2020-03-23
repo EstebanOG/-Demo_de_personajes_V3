@@ -185,4 +185,14 @@ public class EnanoBuilder extends PersonajeBuilder{
         personaje.setIncyIzquierdaDos(50);
     }
 
+    @Override
+    public void vida() {
+        personaje.setVida(100);
+    }
+
+    @Override
+    public void escudo() {
+        personaje.setEscudo(0);
+    }
+
 }

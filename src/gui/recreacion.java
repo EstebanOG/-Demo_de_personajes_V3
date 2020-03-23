@@ -2,9 +2,11 @@ package gui;
 
 import decorator.HumanoDecorator;
 import animacion.*;
+import chainOfResponsability.Verificar;
 import decorator.ElfoDecorator;
 import decorator.EnanoDecorator;
 import decorator.OrcoDecorator;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -20,6 +22,7 @@ import javax.swing.JPanel;
 public class recreacion extends JPanel {
 
     static Personaje personaje;
+    public Verificar aumentoPorPocima = new Verificar();//Se crea un objeto de la clase Verificar la cual se encuentra ChainOfResponsability
     JFrame ventana = new JFrame();
     static ArrayList<Personaje> personajetemp = new ArrayList<>();
     static ArrayList<Object> arreglo_personajes = new ArrayList<>();
@@ -49,6 +52,7 @@ public class recreacion extends JPanel {
     boolean colisionPocima = false;
     Rectangle rect = new Rectangle(403,423,30,20);
     Rectangle rectPj = new Rectangle(340,230,52,80);
+    
     boolean entra = true;
     public recreacion() {
 
@@ -225,17 +229,27 @@ public class recreacion extends JPanel {
                                 personaje = new EnanoDecorator(personaje);
                                 break;
                         }
+                        //personajetemp.get(i).setEscudo(50);
+                        aumentoPorPocima.aumento(personajetemp.get(i).getVida(), personajetemp.get(i).getEscudo(), personajetemp.get(i));
+                        System.out.println(personajetemp.get(i).getEscudo());
                     }
                     entra = false;
                     colisionPocima = true;
                 }
             }
+            
+            g2d.setColor(Color.RED);//Color de la vida
+            g2d.drawString(String.valueOf(personajetemp.get(i).getVida()) + "%", incx , incy - 30 + y);//Pinta el porcentaje de vida que tiene
+            g2d.setColor(Color.BLUE);//Color del escudo
+            g2d.drawString(String.valueOf(personajetemp.get(i).getEscudo()) + "%" , incx , incy - 40 + y);//Pinta el porcentaje de escudo que tiene
             y = y + aumentoSpriteY;
         }
         repaint();
     }
 
     public static void inicia() {
+        
+        
         arreglo_personajes.clear();
         personajetemp.clear();
         switch (eleccion) {
