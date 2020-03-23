@@ -2,35 +2,16 @@ package chainOfResponsability;
 
 import animacion.Personaje;
 
-public class Verificar implements Handler{
-    private Handler next;
+public class Verificar {
+    Handler manejadores[];
 
-    @Override
-    public void setNext(Handler pHandler) {
-        this.next = pHandler;
+    public void operacion(int vida, int escudo, Personaje per) {
+        manejadores = new Handler[2];
+        manejadores[1] = new HandlerVida();
+        manejadores[0] = new HandlerEscudo();
+        for (int i = 0; i < manejadores.length - 1; i++) {
+            manejadores[i].setSuccessor(manejadores[i + 1]);;
+        }
+        manejadores[0].handlerRequest(vida, escudo, per);
     }
-    
-    @Override
-    public Handler getNext() {
-        return this.next;
-    }
-
-    @Override
-    public void aumento(int vida, int escudo, Personaje personaje) {
-        
-        /* Se crean los integrantes de la cadena */
-        HandlerVida vidaActualizada = new HandlerVida(); 
-        HandlerEscudo escudoActualizado = new HandlerEscudo();
-        
-        /* Se asigna el primer encargado en la cadena */
-        this.next = vidaActualizada;
-        
-        /* Se asignan la jerarquia en la cadena de responsabilidades */
-        vidaActualizada.setNext(escudoActualizado);
-        
-        /* Se inicia la cadena */
-        this.next.aumento(vida, escudo, personaje);
-        System.out.println("esto se ejecuta");
-    }
-    
 }

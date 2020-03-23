@@ -2,32 +2,21 @@ package chainOfResponsability;
 
 import animacion.Personaje;
 
-public class HandlerVida implements Handler {
-    private Handler next;
-    @Override
-    public void setNext(Handler pHandler) {
-        this.next = pHandler;
-    }
+public class HandlerVida extends Handler {
 
     @Override
-    public Handler getNext() {
-        return this.next;
-    }
-
-
-    @Override
-    public void aumento(int vida, int escudo, Personaje personaje) {
-        System.out.println("La vida es: " + vida);
-        if (vida < 100) {
+    public void handlerRequest(int vida, int escudo, Personaje per) {
+        if (vida < 100 && vida > 49) {
             System.out.println("se aumenta vida");
             vida = 100;
-        } else if(vida < 50) {
+            per.setVida(vida);
+        } else if (vida < 50) {
+            System.out.println("Vida menor a 50");
             vida = vida + 50;
-        }else{
-            this.next.aumento(vida, escudo, personaje);
+            per.setVida(vida);
+        } else {
+            successor.handlerRequest(vida, escudo, per);
         }
-        personaje.setVida(vida);
-        personaje.setEscudo(escudo);
     }
-    
+
 }

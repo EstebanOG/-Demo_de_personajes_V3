@@ -229,9 +229,8 @@ public class recreacion extends JPanel {
                                 personaje = new EnanoDecorator(personaje);
                                 break;
                         }
-                        //personajetemp.get(i).setEscudo(50);
-                        aumentoPorPocima.aumento(personajetemp.get(i).getVida(), personajetemp.get(i).getEscudo(), personajetemp.get(i));
-                        System.out.println(personajetemp.get(i).getEscudo());
+                        //Se usa aumentoPorPocima para evaluar si aumentar escudo o vida por medio de Cadena de responsailidad
+                        aumentoPorPocima.operacion(personajetemp.get(i).getVida(), personajetemp.get(i).getEscudo(), personajetemp.get(i));
                     }
                     entra = false;
                     colisionPocima = true;
